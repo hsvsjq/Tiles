@@ -176,54 +176,9 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
               ),
             )
           ), 
-          Positioned(
-            top: 400,
-            left: 0,
-            child: SizedBox(
-              width: 80.0,
-              height: 80.0,
-              child: OutlinedButton(
-                child: Text(""),
-                onPressed: () {hitColumn(0);},
-              ),
-            ),
+          Stack(
+            children: widget.playerPreset.customTouchPositions ? widget.playerPreset.touchPositions!.map((pair) => pair.getButton(hitColumn)).toList() : []
           ),
-          Positioned(
-            top: 400,
-            left: 100,
-            child: SizedBox(
-              width: 80.0,
-              height: 80.0,
-              child: OutlinedButton(
-                child: Text(""),
-                onPressed: () {hitColumn(1);},
-              ),
-            ),
-          ),  
-          Positioned(
-            top: 400,
-            left: 200,
-            child: SizedBox(
-              width: 80.0,
-              height: 80.0,
-              child: OutlinedButton(
-                child: Text(""),
-                onPressed: () {hitColumn(2);},
-              ),
-            ),
-          ),  
-          Positioned(
-            top: 400,
-            left: 300,
-            child: SizedBox(
-              width: 80.0,
-              height: 80.0,
-              child: OutlinedButton(
-                child: Text(""),
-                onPressed: () {hitColumn(3);},
-              ),
-            ),
-          ),  
         ]
       )
     );
@@ -313,11 +268,13 @@ class GameplayPreset{
 }
 
 class PlayerPreset{
-  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight);
+  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions);
   final int noteDuration;
   final double hitPosition;
   final double noteHeight;
   final int startDelay;
+  final bool customTouchPositions;
+  final List<TouchPosition>? touchPositions;
 }
 
 class NotePositioningAlgorithm{
@@ -335,4 +292,27 @@ class EndCondition{
   final String name;
   final EndMode endMode;
   final int quota;
+}
+
+class TouchPosition{
+  TouchPosition(this.key, this.xPos, this.yPos);
+
+  final int key;
+  final double xPos;
+  final double yPos;
+
+  Widget getButton(Function hitColumn){
+    return Positioned(
+      top: yPos,
+      left: xPos,
+      child: SizedBox(
+        width: 80.0,
+        height: 80.0,
+        child: OutlinedButton(
+          child: const Text(""),
+          onPressed: () {hitColumn(key);},
+        ),
+      ),
+    );
+  }
 }

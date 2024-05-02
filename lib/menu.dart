@@ -57,7 +57,26 @@ class _Home extends State<Home> {
     var sspeed =  sharedPreferences!.getInt("scrollSpeed");
     var nheight =  sharedPreferences!.getDouble("noteHeight");
     var ctouch =  sharedPreferences!.getBool("customTouch");
-    return PlayerPreset(2000, hpos == null ? 600 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0);
+    
+    ctouch = ctouch ?? false;
+
+    List<TouchPosition>? touchPositions;
+    if(ctouch){
+       touchPositions = [];
+
+      for(int i = 0; i < constants.keyCounts[currentGameplaySettings[0]].value; i++){
+        var x = sharedPreferences!.getDouble("customTouch${i}X");
+        var y = sharedPreferences!.getDouble("customTouch${i}Y");
+        if(x != null && y != null){
+          touchPositions.add(TouchPosition(i, x, y));
+        }else {
+          touchPositions.add(TouchPosition(i, 0, 0));
+        }
+      }
+    }
+    sharedPreferences!.getBool("customTouch");
+
+    return PlayerPreset(2000, hpos == null ? 600 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0, ctouch!, touchPositions);
   }
 
   void mainMenuFunction(int index){
@@ -95,14 +114,15 @@ class _Home extends State<Home> {
       if(index == 0){
         setState((){phase = Phase.touchSettingsMenu;});
       }else{
-        touchSettingsPosition = index;
+        touchSettingsPosition = index - 1;
         setState((){phase = Phase.touchSettingsPosition;});
       }
     }
   }
 
   void touchPositionSettingCallback(TapDownDetails tapDownDetails){
-    print(tapDownDetails.globalPosition);
+    sharedPreferences!.setDouble("customTouch${touchSettingsPosition}X", tapDownDetails.globalPosition.dx);
+    sharedPreferences!.setDouble("customTouch${touchSettingsPosition}Y", tapDownDetails.globalPosition.dy);
     setState((){phase = Phase.touchSettingsMenu2;});
   }
 
