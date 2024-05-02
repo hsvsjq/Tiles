@@ -4,9 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tile/constants.dart' as constants;
 import 'package:tile/gameplay.dart';
 import 'package:tile/result.dart';
+import 'package:tile/touch.dart';
 
 enum Phase{
   mainMenu,
+  touchSettingsMenu,
+  touchSettingsMenu2,
+  touchSettingsPosition,
   settingsMenu,
   scrollSpeedMenu,
   hitPosition,
@@ -52,6 +56,7 @@ class _Home extends State<Home> {
     var hpos = sharedPreferences!.getInt("hitPosition");
     var sspeed =  sharedPreferences!.getInt("scrollSpeed");
     var nheight =  sharedPreferences!.getDouble("noteHeight");
+    var ctouch =  sharedPreferences!.getBool("customTouch");
     return PlayerPreset(2000, hpos == null ? 600 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0);
   }
 
@@ -62,8 +67,43 @@ class _Home extends State<Home> {
       case 1:
         setState((){phase = Phase.settingsMenu;});
       case 2:
-        setState((){phase = Phase.personalBest;});
+        setState((){phase = Phase.personalBest;});      
     }
+  }
+
+  int touchSettingsMenu2Index = 0;
+  int touchSettingsPosition = 0;
+
+  void touchSettingsMenuFunction(int index){
+    switch(index){
+      case 0: 
+        setState((){phase = Phase.mainMenu;});
+      case 1: 
+        touchSettingsMenu2Index = 1;
+        setState((){phase = Phase.touchSettingsMenu2;});
+      case 2: 
+        touchSettingsMenu2Index = 2;
+        setState((){phase = Phase.touchSettingsMenu2;});
+    }
+  }
+
+  void touchSettingsMenuFunction2(int index){
+    if(touchSettingsMenu2Index == 1){
+      sharedPreferences!.setBool("customTouch", index == 0);
+      setState((){phase = Phase.touchSettingsMenu;});
+    }else{
+      if(index == 0){
+        setState((){phase = Phase.touchSettingsMenu;});
+      }else{
+        touchSettingsPosition = index;
+        setState((){phase = Phase.touchSettingsPosition;});
+      }
+    }
+  }
+
+  void touchPositionSettingCallback(TapDownDetails tapDownDetails){
+    print(tapDownDetails.globalPosition);
+    setState((){phase = Phase.touchSettingsMenu2;});
   }
 
   void settingsMenuFunction(int index){
@@ -76,6 +116,8 @@ class _Home extends State<Home> {
         setState((){phase = Phase.hitPosition;});
       case 3: 
         setState((){phase = Phase.noteHeight;});
+      case 4:
+        setState((){phase = Phase.touchSettingsMenu;});
     }
   }
 
@@ -199,6 +241,12 @@ class _Home extends State<Home> {
             switch(phase){
               case Phase.mainMenu:
                 return MenuList(constants.mainMenuList, mainMenuFunction);
+              case Phase.touchSettingsMenu:
+                return MenuList(constants.touchSettingsMenu, touchSettingsMenuFunction);
+              case Phase.touchSettingsMenu2:
+                return MenuList(constants.touchSettingsMenu2[touchSettingsMenu2Index], touchSettingsMenuFunction2);
+              case Phase.touchSettingsPosition:
+                return TouchPositionSetting(touchPositionSettingCallback);
               case Phase.settingsMenu:
                 return MenuList(constants.settingsMenu, settingsMenuFunction);
               case Phase.scrollSpeedMenu:

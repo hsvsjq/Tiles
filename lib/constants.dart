@@ -10,18 +10,31 @@ List<String> mainMenuList = [
   "personal best",
 ];
 
+List<String> touchSettingsMenu = [
+  "back",
+  "use custom position",
+  "custom positions",
+];
+
+List<List<String>> touchSettingsMenu2 = [
+  [],
+  ["true", "false"],
+  ["back", "key 1", "key 2", "key 3", "key 4", "key 5", "key 6"],
+];
+
 List<String> settingsMenu = [
   "back",
   "scroll speed",
   "hit position",
   "note height",
+  "button positions",
 ];
 
 //player preset----------------------------------------------------------------------------------------
 List<String> scrollSpeedMenu = scrollSpeeds.map((e) => "${e / 1000} second").toList();
 
 List<int> scrollSpeeds = [
-  2000, 1500, 1000, 800, 700, 600, 500, 400, 300, 200, 100,
+  2000, 1900, 1800, 1700, 1600, 1500, 1400, 1300, 1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100,
 ];
 
 List<String> hitPositionMenu = hitPositions.map((e) => "$e").toList();
@@ -35,6 +48,8 @@ List<String> noteHeightMenu = noteHeights.map((e) => e.toString()).toList();
 List<double> noteHeights = [
   80.0, 70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0, 1.0, 
 ];
+
+
 
 //-----------------------------------------------------------------------------------------------------
 

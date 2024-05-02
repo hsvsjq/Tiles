@@ -137,59 +137,95 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    return RawGestureDetector(
-      gestures: {
-        MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
-          () => MultiTapGestureRecognizer(),
-          (MultiTapGestureRecognizer instance) {
-            instance.onTapDown =(pointer, details) {
-              tapDownCallBack(details);
-            };
-          },  
-        ),
-      },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned(
-              top: widget.playerPreset.hitPosition,
-              child: SizedBox(
-                width: screenSize.width, 
-                height: 5, 
-                child: Image.asset(
-                  'assets/p.png',
-                  fit: BoxFit.fill,
-                ),
-              )
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned(
+            top: widget.playerPreset.hitPosition,
+            child: SizedBox(
+              width: screenSize.width, 
+              height: 5, 
+              child: Image.asset(
+                'assets/p.png',
+                fit: BoxFit.fill,
+              ),
+            )
+          ),
+          Positioned(
+            top: 300,
+            left: screenSize.width / 2 - 45,
+              child: Text(
+                lastJudgementName,
+                style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2)
+              ),
+          ),
+          Positioned(
+            top: 300,
+            left: screenSize.width / 2 + 45,
+              child: Text(
+                (lastNoteEarly == null ? "" : (lastNoteEarly! ? "early" : "late")),
+                style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5)
+              ),
+          ),
+          Positioned(
+            child: SizedBox(
+              width: screenSize.width, 
+              height: screenSize.height, 
+              child: Stack(
+                children: notes.expand((pair) => pair).toList()
+              ),
+            )
+          ), 
+          Positioned(
+            top: 400,
+            left: 0,
+            child: SizedBox(
+              width: 80.0,
+              height: 80.0,
+              child: OutlinedButton(
+                child: Text(""),
+                onPressed: () {hitColumn(0);},
+              ),
             ),
-            Positioned(
-              top: 300,
-              left: screenSize.width / 2 - 45,
-                child: Text(
-                  lastJudgementName,
-                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2)
-                ),
+          ),
+          Positioned(
+            top: 400,
+            left: 100,
+            child: SizedBox(
+              width: 80.0,
+              height: 80.0,
+              child: OutlinedButton(
+                child: Text(""),
+                onPressed: () {hitColumn(1);},
+              ),
             ),
-            Positioned(
-              top: 300,
-              left: screenSize.width / 2 + 45,
-                child: Text(
-                  (lastNoteEarly == null ? "" : (lastNoteEarly! ? "early" : "late")),
-                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5)
-                ),
+          ),  
+          Positioned(
+            top: 400,
+            left: 200,
+            child: SizedBox(
+              width: 80.0,
+              height: 80.0,
+              child: OutlinedButton(
+                child: Text(""),
+                onPressed: () {hitColumn(2);},
+              ),
             ),
-            Positioned(
-              child: SizedBox(
-                width: screenSize.width, 
-                height: screenSize.height, 
-                child: Stack(
-                  children: notes.expand((pair) => pair).toList()
-                ),
-              )
-            ), 
-          ]
-        )
-      )   
+          ),  
+          Positioned(
+            top: 400,
+            left: 300,
+            child: SizedBox(
+              width: 80.0,
+              height: 80.0,
+              child: OutlinedButton(
+                child: Text(""),
+                onPressed: () {hitColumn(3);},
+              ),
+            ),
+          ),  
+        ]
+      )
     );
   }
 
