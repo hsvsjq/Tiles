@@ -176,9 +176,22 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
               ),
             )
           ), 
-          Stack(
-            children: widget.playerPreset.customTouchPositions ? widget.playerPreset.touchPositions!.map((pair) => pair.getButton(hitColumn)).toList() : []
-          ),
+          widget.playerPreset.customTouchPositions ?
+            Stack(
+              children:  widget.playerPreset.touchPositions!.map((pair) => pair.getButton(hitColumn)).toList()
+            ) :
+            RawGestureDetector(
+              gestures: {
+                MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
+                  () => MultiTapGestureRecognizer(),
+                  (MultiTapGestureRecognizer instance) {
+                    instance.onTapDown =(pointer, details) {
+                      tapDownCallBack(details);
+                    };
+                  },  
+                ),
+              },
+            )
         ]
       )
     );
@@ -303,8 +316,8 @@ class TouchPosition{
 
   Widget getButton(Function hitColumn){
     return Positioned(
-      top: yPos,
-      left: xPos,
+      top: yPos - 40,
+      left: xPos - 40,
       child: SizedBox(
         width: 80.0,
         height: 80.0,
