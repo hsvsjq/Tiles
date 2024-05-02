@@ -5,21 +5,29 @@ import 'package:tile/menu.dart';
 //todo
 //implement menu options 
 //  pattern
-//    jump hand alternate
+//    jump hand alternating
 //    random chords
-//Gameplay
-//  accuracy early late 
 //player preferences
 //  skin
 //    each column has one note color
+//    circles
+//    random images
 //  note height
 //  no more than x notes jack
 //other gameplay rules
-//  change scroll speed mid gameplay  ?? maybe scrap this ??
-//    probably will have to change hit area according to speed
+//  change note frequency mid gameplay  
+//    change note frequency AND scroll speed
+//    change note frequency but NOT scroll speed 
 //allow to set press position anywhere
-//  goal: make it easier to use 5 fingers on a small screen
-
+//  make the size of the buttons adjustable
+//  make a preview of what is the current position of the buttons
+//    make it easier to visualizer what the numbers of the others player presets represent aswell
+//menu
+//  refactor menus !!! 
+//  make the speeds = "levels" and make them continue indefinitely
+//    make the unlock system of the "levels"
+//gameplay
+//  find a way to split the changing (notes and jugdements) parts and nonchanging (hit position hint and buttons) parts of the gameplay widget improve the performance
 
 
 

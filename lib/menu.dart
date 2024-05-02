@@ -62,21 +62,11 @@ class _Home extends State<Home> {
 
     List<TouchPosition>? touchPositions;
     if(ctouch){
-       touchPositions = [];
-
-      for(int i = 0; i < constants.keyCounts[currentGameplaySettings[0]].value; i++){
-        var x = sharedPreferences!.getDouble("customTouch${i}X");
-        var y = sharedPreferences!.getDouble("customTouch${i}Y");
-        if(x != null && y != null){
-          touchPositions.add(TouchPosition(i, x, y));
-        }else {
-          touchPositions.add(TouchPosition(i, 0, 0));
-        }
-      }
+       touchPositions = getTouchPositions(constants.keyCounts[currentGameplaySettings[0]].value);
     }
     sharedPreferences!.getBool("customTouch");
 
-    return PlayerPreset(2000, hpos == null ? 600 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0, ctouch!, touchPositions);
+    return PlayerPreset(2000, hpos == null ? 600 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0, ctouch, touchPositions);
   }
 
   void mainMenuFunction(int index){
@@ -124,6 +114,20 @@ class _Home extends State<Home> {
     sharedPreferences!.setDouble("customTouch${touchSettingsPosition}X", tapDownDetails.globalPosition.dx);
     sharedPreferences!.setDouble("customTouch${touchSettingsPosition}Y", tapDownDetails.globalPosition.dy);
     setState((){phase = Phase.touchSettingsMenu2;});
+  }
+
+  List<TouchPosition> getTouchPositions(int count){
+    List<TouchPosition> touchPositions = [];
+    for(int i = 0; i < constants.keyCounts[count].value; i++){
+      var x = sharedPreferences!.getDouble("customTouch${i}X");
+      var y = sharedPreferences!.getDouble("customTouch${i}Y");
+      if(x != null && y != null){
+        touchPositions.add(TouchPosition(i, x, y));
+      }else {
+        touchPositions.add(TouchPosition(i, 0, 0));
+      }
+    }
+    return touchPositions;
   }
 
   void settingsMenuFunction(int index){
@@ -266,7 +270,7 @@ class _Home extends State<Home> {
               case Phase.touchSettingsMenu2:
                 return MenuList(constants.touchSettingsMenu2[touchSettingsMenu2Index], touchSettingsMenuFunction2);
               case Phase.touchSettingsPosition:
-                return TouchPositionSetting(touchPositionSettingCallback);
+                return TouchPositionSetting(touchPositionSettingCallback, getTouchPositions(6));
               case Phase.settingsMenu:
                 return MenuList(constants.settingsMenu, settingsMenuFunction);
               case Phase.scrollSpeedMenu:

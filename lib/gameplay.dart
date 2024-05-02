@@ -178,7 +178,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
           ), 
           widget.playerPreset.customTouchPositions ?
             Stack(
-              children:  widget.playerPreset.touchPositions!.map((pair) => pair.getButton(hitColumn)).toList()
+              children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(hitColumn)).toList()
             ) :
             RawGestureDetector(
               gestures: {
@@ -203,7 +203,6 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
     super.dispose();
   }
 }
-
 
 class Note extends StatefulWidget{
   const Note(this.duration, this.width, this.height, this.xpos, this.missCallback, this.lastNote, {super.key});
