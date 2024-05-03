@@ -1,8 +1,10 @@
 
 import 'package:tile/gameplay.dart';
-import 'package:tile/menu.dart';
+import 'package:tile/menu_old.dart';
 import 'package:tile/util.dart';
 import 'dart:math' as math;
+
+
 
 List<String> mainMenuList = [
   "play",
@@ -31,19 +33,19 @@ List<String> settingsMenu = [
 ];
 
 //player preset----------------------------------------------------------------------------------------
-List<String> scrollSpeedMenu = scrollSpeeds.map((e) => "${e / 1000} second").toList();
+List<String> scrollSpeedsMenu = scrollSpeeds.map((e) => "${e / 1000} second").toList();
 
 List<int> scrollSpeeds = [
   2000, 1900, 1800, 1700, 1600, 1500, 1400, 1300, 1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100,
 ];
 
-List<String> hitPositionMenu = hitPositions.map((e) => "$e").toList();
+List<String> hitPositionsMenu = hitPositions.map((e) => "$e").toList();
 
 List<int> hitPositions = [
   300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700
 ];
 
-List<String> noteHeightMenu = noteHeights.map((e) => e.toString()).toList();
+List<String> noteHeightsMenu = noteHeights.map((e) => e.toString()).toList();
 
 List<double> noteHeights = [
   80.0, 70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0, 1.0, 
@@ -65,7 +67,6 @@ List<List<String>> gameplaySettings = [
 ];
 
 List<NotePositioningAlgorithm> notePositioningAlgorithms = [
-  NotePositioningAlgorithm("00", "back", (count, keyCount) => {}),
   NotePositioningAlgorithm("01", "single stream", (count, keyCount) => {math.Random().nextInt(keyCount)}), 
   NotePositioningAlgorithm("02", "1/4 jump stream",
     (count, keyCount) { return  (count % 4 == 0 ? getUniqueRandomNumbers(2, keyCount) : [math.Random().nextInt(keyCount)]).toSet(); }
@@ -94,7 +95,6 @@ List<NotePositioningAlgorithm> notePositioningAlgorithms = [
 ];
 
 List<EndCondition> endConditions = [
-  EndCondition("00", "back", EndMode.noteCount, 666), 
   EndCondition("01", "25 notes", EndMode.noteCount, 25), 
   EndCondition("02", "50 notes", EndMode.noteCount, 50), 
   EndCondition("03", "100 notes", EndMode.noteCount, 100), 
@@ -109,7 +109,6 @@ List<EndCondition> endConditions = [
 ];
 
 List<KeyCount> keyCounts = [
-  KeyCount("00", "back", 666),
   KeyCount("01", "1 key", 1),
   KeyCount("02", "2 key", 2),
   KeyCount("03", "3 key", 3),
@@ -120,14 +119,13 @@ List<KeyCount> keyCounts = [
 
 class KeyCount{
   KeyCount(this.id, this.name, this.value);
-
+  
   String id;
   String name;
   int value;
 }
 
 List<NoteFrequency> noteFrequencies = [
-  NoteFrequency("00", "back", 666),
   NoteFrequency("01", "1/3 note per second", 3000),
   NoteFrequency("02", "1/2 note per second", 2000),
   NoteFrequency("03", "1 note per second", 1000),

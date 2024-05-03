@@ -62,7 +62,11 @@ class ResultData{
     return "${hitCount[0]},${hitCount[1]},${hitCount[2]}|$missCount|$spamCount";
   }
 
-  ResultData.fromString(String s){
+  ResultData.fromString(String? s){
+    if(s == null){
+      return;
+    }
+
     List<String> l = s.split("|").toList();//.map((e) => int.parse(e)).toList();
     hitCount = l[0].split(",").map((e) => int.parse(e)).toList();
     missCount = int.parse(l[1]);
@@ -78,8 +82,8 @@ class ResultData{
   }
 
   //if received is higher return true
-  bool compare(ResultData result){
-
+  bool compare(ResultData? result){
+    if(result == null){return false;}
     return result.getScore() > getScore();
   }
 }

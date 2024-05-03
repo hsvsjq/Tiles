@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tile/constants.dart' as constants;
-import 'package:tile/menu.dart';
+import 'package:tile/menu_old.dart';
 import 'package:tile/result.dart';
 
 class Gameplay extends StatefulWidget{
@@ -265,10 +265,10 @@ class _Note extends State<Note> with SingleTickerProviderStateMixin {
 class GameplayPreset{
   GameplayPreset(this.keyCount, this.endCondition, this.notePositioningAlgorithm, this.noteFrequency);
 
-  final constants.KeyCount keyCount;
-  final EndCondition endCondition;
-  final NotePositioningAlgorithm notePositioningAlgorithm;
-  final constants.NoteFrequency noteFrequency;
+  constants.KeyCount keyCount;
+  EndCondition endCondition;
+  NotePositioningAlgorithm notePositioningAlgorithm;
+  constants.NoteFrequency noteFrequency;
 
   String getName(){
     return "${keyCount.name} | ${endCondition.name} | ${notePositioningAlgorithm.name} | ${noteFrequency.name}";
@@ -281,12 +281,12 @@ class GameplayPreset{
 
 class PlayerPreset{
   PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions);
-  final int noteDuration;
-  final double hitPosition;
-  final double noteHeight;
-  final int startDelay;
-  final bool customTouchPositions;
-  final List<TouchPosition>? touchPositions;
+  int noteDuration;
+  double hitPosition;
+  double noteHeight;
+  int startDelay;
+  bool customTouchPositions;
+  List<TouchPosition>? touchPositions;
 }
 
 class NotePositioningAlgorithm{
