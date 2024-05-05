@@ -1,6 +1,4 @@
 import 'dart:collection';
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tile/constants.dart' as constants;
@@ -34,6 +32,10 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late final EndMode endMode = widget.gameplayPreset.endCondition.endMode;
   late final int quota = widget.gameplayPreset.endCondition.quota;
 
+  late double animationDistInNoteHeights = ((widget.playerPreset.hitPosition + (MediaQuery.of(context).size.height / widget.playerPreset.noteDuration) * judgements.last.ms) / widget.playerPreset.noteHeight) + 1;
+  late double noteHeightPerMilisecond = (animationDistInNoteHeights) / widget.playerPreset.noteDuration;
+  late double hitPosInNoteHeights = (widget.playerPreset.hitPosition / widget.playerPreset.noteHeight);
+
   late final ticker = createTicker((elapsed) { 
     int time = elapsed.inMilliseconds - widget.playerPreset.startDelay;
     if(time >= 0 && time ~/ widget.gameplayPreset.noteFrequency.value == count){
@@ -54,7 +56,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
       for (var col in cols) { 
         var gk = GlobalKey<_Note>();
         globalKeys[col].addFirst(gk);
-        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, widget.playerPreset.noteHeight, col.toDouble(), missCallback, lastNote, key: gk));
+        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, widget.playerPreset.noteHeight, widget.playerPreset.hitPosition, animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, key: gk));
       }
     });
   }
@@ -112,10 +114,12 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
 
   void hitColumn(int column){
     if(!notes[column].isEmpty){
-      double ypos = globalKeys[column].last.currentState!.ypos;
-      double distance = ypos  - (widget.playerPreset.hitPosition / screenSize.height);
+      double ypos = globalKeys[column].last.currentState!.ypos * (animationDistInNoteHeights);
+      
+      double dist = ypos - hitPosInNoteHeights;
 
-      double ms = (distance * widget.playerPreset.noteDuration);
+      double ms = (dist / noteHeightPerMilisecond);
+
       for (int i = 0; i < constants.judgements.length; i++){
         if(ms.abs() <= constants.judgements[i].ms){
           if(i != 0){
@@ -181,7 +185,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
           ), 
           widget.playerPreset.customTouchPositions ?
             Stack(
-              children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(hitColumn)).toList()
+              children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(hitColumn, widget.playerPreset.customButtonSize!)).toList()
             ) :
             RawGestureDetector(
               gestures: {
@@ -208,11 +212,13 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
 }
 
 class Note extends StatefulWidget{
-  const Note(this.duration, this.width, this.height, this.xpos, this.missCallback, this.lastNote, {super.key});
+  const Note(this.duration, this.width, this.height, this.hitPosition, this.animationDistInNoteHeights, this.xpos, this.missCallback, this.lastNote, {super.key});
 
   final int duration;
   final double width;
   final double height;
+  final double hitPosition;
+  final double animationDistInNoteHeights;
   final double xpos;
   final Function missCallback;
   final bool lastNote;
@@ -236,9 +242,11 @@ class _Note extends State<Note> with SingleTickerProviderStateMixin {
     if(!hit) {widget.missCallback(widget.xpos);}
   });
 
+
+  //offset is in widget.height units
   late final Animation<Offset> _animation = Tween<Offset>(
-    begin: Offset(widget.xpos, -1.0),
-    end: Offset(widget.xpos, ((MediaQuery.of(context).size.height) / widget.height)),
+    begin: Offset(widget.xpos, -1),
+    end: Offset(widget.xpos, widget.animationDistInNoteHeights - 1), 
   ).animate(_controller);
 
 
@@ -287,13 +295,14 @@ class GameplayPreset{
 }
 
 class PlayerPreset{
-  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions);
+  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions, this.customButtonSize);
   int noteDuration;
   double hitPosition;
   double noteHeight;
   int startDelay;
   bool customTouchPositions;
   List<TouchPosition>? touchPositions;
+  double? customButtonSize;
 }
 
 class NotePositioningAlgorithm{
@@ -329,13 +338,13 @@ class TouchPosition{
   final double xPos;
   final double yPos;
 
-  Widget getButton(Function hitColumn){
+  Widget getButton(Function hitColumn, double buttonSize){
     return Positioned(
-      top: yPos - 40,
-      left: xPos - 40,
+      top: yPos - buttonSize / 2,
+      left: xPos - buttonSize / 2,
       child: SizedBox(
-        width: 80.0,
-        height: 80.0,
+        width: buttonSize,
+        height: buttonSize,
         child: OutlinedButton(
           child: const Text(""),
           onPressed: () {hitColumn(key);},

@@ -4,10 +4,11 @@ import 'package:tile/gameplay.dart';
 
 
 class TouchPositionSetting extends StatefulWidget{
-  const TouchPositionSetting(this.callback, this.touchPositions, {super.key});
+  const TouchPositionSetting(this.callback, this.touchPositions, this.buttonSize, {super.key});
 
   final Function(TapDownDetails) callback;
   final List<TouchPosition> touchPositions;
+  final double buttonSize;
 
   @override
   State<TouchPositionSetting> createState() => _TouchPositionSetting();
@@ -29,7 +30,7 @@ class _TouchPositionSetting extends State<TouchPositionSetting>{
             ),
           ),
           Stack(
-            children: widget.touchPositions.map((pair) => pair.getButton((int s) => {})).toList()
+            children: widget.touchPositions.map((pair) => pair.getButton((int s) => {}, widget.buttonSize)).toList()
           )
         ]
       ),

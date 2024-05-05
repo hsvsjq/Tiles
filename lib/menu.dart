@@ -73,7 +73,10 @@ class MenuSingleton{
 
   void init(Function(Phase) func){
     exitMenuCallback = func;
-    SharedPreferences.getInstance().then((value) => sharedPreferences = value);
+    SharedPreferences.getInstance().then((value) {
+      sharedPreferences = value;
+      customButtonSize = sharedPreferences.getDouble("customButtonSize") ?? 40.0;
+    });
     gameplayPreset = GameplayPreset(keyCounts[0], notePositioningAlgorithms[keyCounts[0]]![0], endConditions[0], NoteFrequency("10", "default", 1000, 0));
   }
 
@@ -82,6 +85,7 @@ class MenuSingleton{
     var sspeed = sharedPreferences.getInt("scrollSpeed");
     var nheight = sharedPreferences.getDouble("noteHeight");
     var ctouch = sharedPreferences.getBool("useCustomButtonPositions");
+    var cbuttonsize = sharedPreferences.getDouble("customButtonSize");
     
     ctouch = ctouch ?? false;
 
@@ -90,7 +94,7 @@ class MenuSingleton{
        touchPositions = getTouchPositions(gameplayPreset.keyCount.value);
     }
 
-    return PlayerPreset(2000, hpos == null ? 600 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0, ctouch, touchPositions);
+    return PlayerPreset(2000, hpos == null ? 600 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0, ctouch, touchPositions, cbuttonsize);
   }
 
   List<TouchPosition> getTouchPositions(int count){
@@ -152,10 +156,17 @@ class MenuSingleton{
     sharedPreferences.setBool("useCustomButtonPositions", value);
   }
 
+  double customButtonSize = 40;
+
+  void buttonSizeSelectCallback(double value){
+    customButtonSize = value;
+    sharedPreferences.setDouble("customButtonSize", value);
+  }
+
   int customPositionKeySelection = 0;
 
   void customPositionKeySelectCallback(int key){
-    customPositionKeySelection = key;
+    customPositionKeySelection = key - 1;
     exitMenuCallback(Phase.customButton);
   }
 }
@@ -233,7 +244,13 @@ MenuPathSplit buttonPositionMenu() => MenuPathSplit([
       MenuPath("false", false, MenuSingleton().useCustomPositionSelectCallback, buttonPositionMenu),
     ])
   ),
+  MenuPath("button size", null, null, buttonSizeMenu),
   MenuPath("custom position", null, null, buttonPositionKeyMenu),
+]);
+
+MenuPathSplit buttonSizeMenu() => MenuPathSplit([
+  MenuPath("back", null, null, settingsMenu),
+  ...buttonSizes.map((e) => MenuPath(e.toString(), e, MenuSingleton().buttonSizeSelectCallback, buttonPositionMenu))
 ]);
 
 MenuPathSplit buttonPositionKeyMenu() => MenuPathSplit([

@@ -38,7 +38,8 @@ class _Home extends State<Home>{
               case Phase.customButton:
                 return TouchPositionSetting(
                   touchPositionSettingCallback, 
-                  menuSingleton.getTouchPositions(6) //6 is the highes keycount (up to now)  ////i probably want to un-hardcode this later
+                  menuSingleton.getTouchPositions(6), //6 is the highes keycount (up to now)  ////i probably want to un-hardcode this later
+                  menuSingleton.customButtonSize
                 );
 
               case Phase.result:

@@ -41,13 +41,17 @@ List<int> scrollSpeeds = [
 List<String> hitPositionsMenu = hitPositions.map((e) => "$e").toList();
 
 List<int> hitPositions = [
-  300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700
+  200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700
 ];
 
 List<String> noteHeightsMenu = noteHeights.map((e) => e.toString()).toList();
 
 List<double> noteHeights = [
   80.0, 70.0, 60.0, 50.0, 40.0, 30.0, 20.0, 10.0, 1.0, 
+];
+
+List<double> buttonSizes = [
+  20,30,40,50,60,70,80,90,100,110,120,130,140,150
 ];
 
 
