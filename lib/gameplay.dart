@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late final globalKeys = List.generate(widget.gameplayPreset.keyCount.value, (i) => ListQueue<GlobalKey<_Note>>());
   late final notes = List.generate(widget.gameplayPreset.keyCount.value, (i) => ListQueue<Note>());
   
-  var count = 1;
+  var count = 0;
   late final Size screenSize = MediaQuery.of(context).size;
   late final double columnWidth = screenSize.width / widget.gameplayPreset.keyCount.value;
 
@@ -34,8 +35,9 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late final int quota = widget.gameplayPreset.endCondition.quota;
 
   late final ticker = createTicker((elapsed) { 
-    if((elapsed.inMilliseconds - widget.playerPreset.startDelay) ~/ widget.gameplayPreset.noteFrequency.value == count){
-      if(endMode == EndMode.noteCount && !gameplayEnded && count >= quota){
+    int time = elapsed.inMilliseconds - widget.playerPreset.startDelay;
+    if(time >= 0 && time ~/ widget.gameplayPreset.noteFrequency.value == count){
+      if(endMode == EndMode.noteCount && !gameplayEnded && count >= quota - 1){
         gameplayEnded = true;
         sendNote(true);
         count = -1; //setting this to -1 in order to not enter this section again

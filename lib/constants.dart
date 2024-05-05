@@ -119,6 +119,12 @@ List<NotePositioningAlgorithm> allNotePositioningAlgorithms = [
     (count, keyCount) { return  List.generate(keyCount - 1, (index) => index).where((element) => element % 2 == count % 2).toSet()..addAll(count % 5 == 0 ? [keyCount - 1] : []); }), 
   NotePositioningAlgorithm("21", "reverse cu bracket",
     (count, keyCount) { return  List.generate(keyCount - 1, (index) => index + 1).where((element) => (element) % 2 == count % 2).toSet()..addAll(count % 5 == 0 ? [0] : []); }), 
+  NotePositioningAlgorithm("22", "cu break",
+    (count, keyCount) { return count % 32 == 24 ? <int>{} : (List.generate(keyCount - 1, (index) => index).where((element) => element % 2 == count % 2).toSet()..addAll([4,7,9,12,15,20,23,25,28,31].contains(count % 32) ? [keyCount - 1] : [])); }), 
+  NotePositioningAlgorithm("23", "reverse cu break",
+    (count, keyCount) { return count % 32 == 24 ? <int>{} : (List.generate(keyCount - 1, (index) => index + 1).where((element) => (element) % 2 == count % 2).toSet()..addAll([4,7,9,12,15,20,23,25,28,31].contains(count % 32) ? [0] : [])); }), 
+  NotePositioningAlgorithm("24", "cu jack",
+    (count, keyCount) { return count % 2 == 0 ? {(count ~/ 2 % ((keyCount - 1) * 2) - keyCount + 1).abs()} : (List.generate(keyCount, (index) => index).toSet()); }), 
 ];
 
 Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
@@ -149,6 +155,7 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[7], //   1/2 hands
     allNotePositioningAlgorithms[19], //  all full chords
     allNotePositioningAlgorithms[18], //  full bracket
+    allNotePositioningAlgorithms[24], //  cu jack
   ],
   keyCounts[3]: [ //4 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -170,6 +177,7 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[19], //  all full chords
     allNotePositioningAlgorithms[17], //  walking chords
     allNotePositioningAlgorithms[18], //  full bracket
+    allNotePositioningAlgorithms[24], //  cu jack
   ],
   keyCounts[4]: [ //5 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -194,6 +202,9 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[18], //  full bracket
     allNotePositioningAlgorithms[20], //  cu bracket
     allNotePositioningAlgorithms[21], //  reverse cu bracket
+    allNotePositioningAlgorithms[22], //  cu break
+    allNotePositioningAlgorithms[23], //  reverse cu break
+    allNotePositioningAlgorithms[24], //  cu jack
   ],
   keyCounts[5]: [ //6 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -216,6 +227,7 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[19], //  all full chords
     allNotePositioningAlgorithms[17], //  walking chords
     allNotePositioningAlgorithms[18], //  full bracket
+    allNotePositioningAlgorithms[24], //  cu jack
   ],
 };
 
