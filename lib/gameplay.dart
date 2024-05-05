@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tile/constants.dart' as constants;
-import 'package:tile/menu_old.dart';
+import 'package:tile/constants.dart';
 import 'package:tile/result.dart';
 
 class Gameplay extends StatefulWidget{
@@ -36,13 +36,13 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late final ticker = createTicker((elapsed) { 
     if((elapsed.inMilliseconds - widget.playerPreset.startDelay) ~/ widget.gameplayPreset.noteFrequency.value == count){
       if(endMode == EndMode.noteCount && !gameplayEnded && count >= quota){
-        count = -1; //setting this to -1 in order to not enter this section again
         gameplayEnded = true;
         sendNote(true);
+        count = -1; //setting this to -1 in order to not enter this section again
         return;
       }
-      count += 1;
       sendNote(false);
+      count += 1;
     }
   });
 
@@ -93,6 +93,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
 
   void endGameplay(){
     resultData.gameplayPreset = widget.gameplayPreset;
+    resultData.barCount = count;
     widget.gameplayEndedCallback(resultData);
   }
 
@@ -263,19 +264,23 @@ class _Note extends State<Note> with SingleTickerProviderStateMixin {
 
 
 class GameplayPreset{
-  GameplayPreset(this.keyCount, this.endCondition, this.notePositioningAlgorithm, this.noteFrequency);
+  GameplayPreset(this.keyCount, this.notePositioningAlgorithm, this.endCondition, this.noteFrequency);
 
   constants.KeyCount keyCount;
-  EndCondition endCondition;
   NotePositioningAlgorithm notePositioningAlgorithm;
+  EndCondition endCondition;
   constants.NoteFrequency noteFrequency;
 
   String getName(){
     return "${keyCount.name} | ${endCondition.name} | ${notePositioningAlgorithm.name} | ${noteFrequency.name}";
   }
 
-  String getId(){
+  String getFullId(){
     return "${keyCount.id}${endCondition.id}${notePositioningAlgorithm.id}${noteFrequency.id}";
+  }
+
+  String getId(){
+    return "${keyCount.id}${endCondition.id}${notePositioningAlgorithm.id}";
   }
 }
 
@@ -298,12 +303,21 @@ class NotePositioningAlgorithm{
 }
 
 class EndCondition{
-  EndCondition(this.id, this.name, this.endMode, this.quota);
+  EndCondition(this.id, this.name, this.endMode, this.quota, this.clearCondition, this.previousEndCondition);
 
   final String id;
   final String name;
   final EndMode endMode;
   final int quota;
+  final ClearCondition clearCondition;
+  final int? previousEndCondition; //index of the constant.endConditions element
+}
+
+class ClearCondition{
+  ClearCondition(this.barCount, this.missCount);
+
+  final int? barCount;
+  final int? missCount;
 }
 
 class TouchPosition{

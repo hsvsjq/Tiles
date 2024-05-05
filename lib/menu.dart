@@ -74,7 +74,7 @@ class MenuSingleton{
   void init(Function(Phase) func){
     exitMenuCallback = func;
     SharedPreferences.getInstance().then((value) => sharedPreferences = value);
-    gameplayPreset = GameplayPreset(keyCounts[0], endConditions[0], notePositioningAlgorithms[0], noteFrequencies[0]);
+    gameplayPreset = GameplayPreset(keyCounts[0], notePositioningAlgorithms[keyCounts[0]]![0], endConditions[0], NoteFrequency("10", "default", 1000, 0));
   }
 
   PlayerPreset makePlayerPreset(){
@@ -108,16 +108,27 @@ class MenuSingleton{
     return touchPositions;
   }
 
+  int getHighestNoteFrequencyLevel(GameplayPreset gPreset){
+    String id = gPreset.getId();
+    int level = sharedPreferences.getInt("level$id") ?? 5;
+    return level;
+  }
+
+  void increaseNoteFrequencyLevel(GameplayPreset gPreset){
+    String id = gPreset.getId();
+    sharedPreferences.setInt("level$id", gPreset.noteFrequency.level + 1);
+  }
+
   void keyCountSelectCallback(KeyCount keyCount){
     gameplayPreset.keyCount = keyCount;
   }
   
-  void endConditionSelectCallback(EndCondition endCondition){
-    gameplayPreset.endCondition = endCondition;
-  }
-
   void notePositioningAlgorithmSelectCallback(NotePositioningAlgorithm notePositioningAlgorithm){
     gameplayPreset.notePositioningAlgorithm = notePositioningAlgorithm;
+  }
+
+  void endConditionSelectCallback(EndCondition endCondition){
+    gameplayPreset.endCondition = endCondition;
   }
 
   void noteFrequencySelectCallback(NoteFrequency noteFrequency){
@@ -158,28 +169,26 @@ MenuPathSplit mainMenu() => MenuPathSplit([
 
 MenuPathSplit keyCountMenu() => MenuPathSplit([
   MenuPath("back", null, null, mainMenu), 
-  ...keyCounts.map((e) => MenuPath(e.name, e, MenuSingleton().keyCountSelectCallback, endConditionMenu)),
+  ...keyCounts.map((e) => MenuPath(e.name, e, MenuSingleton().keyCountSelectCallback, notePositioningAlgorithmMenu)),
 ]);
-
-
-
-MenuPathSplit endConditionMenu() => MenuPathSplit([
-  MenuPath("back", null, null, keyCountMenu), 
-  ...endConditions.map((e) => MenuPath(e.name, e, MenuSingleton().endConditionSelectCallback, notePositioningAlgorithmMenu)),
-]);
-
 
 
 MenuPathSplit notePositioningAlgorithmMenu() => MenuPathSplit([
-  MenuPath("back", null, null, endConditionMenu), 
-  ...notePositioningAlgorithms.map((e) => MenuPath(e.name, e, MenuSingleton().notePositioningAlgorithmSelectCallback, noteFrequencyMenu)),
+  MenuPath("back", null, null, keyCountMenu), 
+  ...notePositioningAlgorithms[MenuSingleton().gameplayPreset.keyCount]!.map((e) => MenuPath(e.name, e, MenuSingleton().notePositioningAlgorithmSelectCallback, endConditionMenu)),
 ]);
 
 
+MenuPathSplit endConditionMenu() => MenuPathSplit([
+  MenuPath("back", null, null, notePositioningAlgorithmMenu), 
+  ...endConditions.map((e) => MenuPath(e.name, e, MenuSingleton().endConditionSelectCallback, noteFrequencyMenu)),
+]);
+
 
 MenuPathSplit noteFrequencyMenu() => MenuPathSplit([
-  MenuPath("back", null, null, notePositioningAlgorithmMenu), 
-  ...noteFrequencies.map((e) => MenuPath(e.name, e, MenuSingleton().noteFrequencySelectCallback, () => null)),
+  MenuPath("back", null, null, endConditionMenu), 
+  ...noteFrequencies(MenuSingleton().getHighestNoteFrequencyLevel(MenuSingleton().gameplayPreset)).map((e) => MenuPath(e.name, e, MenuSingleton().noteFrequencySelectCallback, () => null)),
+  MenuPath("<blocked>", null, null, noteFrequencyMenu), 
 ]);
 
 

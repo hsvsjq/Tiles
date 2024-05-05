@@ -56,6 +56,7 @@ class ResultData{
   List<int> hitCount = [0,0,0];
   int missCount = 0;
   int spamCount = 0;
+  int barCount = 0;
   GameplayPreset? gameplayPreset;
 
   String getResultString(){
@@ -67,7 +68,7 @@ class ResultData{
       return;
     }
 
-    List<String> l = s.split("|").toList();//.map((e) => int.parse(e)).toList();
+    List<String> l = s.split("|").toList();
     hitCount = l[0].split(",").map((e) => int.parse(e)).toList();
     missCount = int.parse(l[1]);
     spamCount = int.parse(l[2]);
@@ -85,5 +86,11 @@ class ResultData{
   bool compare(ResultData? result){
     if(result == null){return false;}
     return result.getScore() > getScore();
+  }
+
+  bool cleared(){
+    return gameplayPreset!.endCondition.clearCondition.missCount == null ? 
+      (barCount >= gameplayPreset!.endCondition.clearCondition.barCount!) : 
+      (missCount <= gameplayPreset!.endCondition.clearCondition.missCount!);
   }
 }

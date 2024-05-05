@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tile/constants.dart';
 import 'package:tile/gameplay.dart';
 import 'package:tile/menu.dart';
 import 'package:tile/result.dart';
@@ -64,17 +65,29 @@ class _Home extends State<Home>{
   late ResultData oldPb;
 
   void gameplayEndedFunction(ResultData resultData){
-    currentPhase = Phase.result;
-
     lastResult = resultData;
-    String? pbStr = menuSingleton.sharedPreferences.getString(resultData.gameplayPreset!.getId());
+    String? pbStr = menuSingleton.sharedPreferences.getString(resultData.gameplayPreset!.getFullId());
     oldPb = ResultData.fromString(pbStr);
 
     if(!resultData.compare(oldPb)){ //is pb
-      menuSingleton.sharedPreferences.setString(resultData.gameplayPreset!.getId(), resultData.getResultString());
+      menuSingleton.sharedPreferences.setString(resultData.gameplayPreset!.getFullId(), resultData.getResultString());
     }
-    
-    setState(() {}); //update widget
+  
+    //cleared clearCondition
+    if(resultData.cleared()){
+      GameplayPreset g = resultData.gameplayPreset!;
+      EndCondition? e = g.endCondition;
+      while(e != null){
+        g.endCondition = e;
+        //played highest level  
+        if(g.noteFrequency.level >= menuSingleton.getHighestNoteFrequencyLevel(g)){
+          menuSingleton.increaseNoteFrequencyLevel(g);
+        }
+        e = g.endCondition.previousEndCondition == null ? null : endConditions[g.endCondition.previousEndCondition!];
+      }
+    }
+
+    setState(() {currentPhase = Phase.result;}); //update widget
   }
 
   void exitMenuCallback(Phase phase){

@@ -21,9 +21,8 @@ import 'package:tile/home.dart';
 //allow to set press position anywhere
 //  make the size of the buttons adjustable
 //  make a preview of what is the current position of the buttons
-//    make it easier to visualizer what the numbers of the others player presets represent aswell
+//    make it easier to visualize what the numbers of the others player presets represent aswell
 //menu
-//  refactor menus !!! 
 //  make the speeds = "levels" and make them continue indefinitely
 //    make the unlock system of the "levels"
 //gameplay
