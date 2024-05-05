@@ -103,13 +103,23 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
 
   tapDownCallBack(TapDownDetails details){
     double xpos = details.globalPosition.dx;
+    double ypos = details.globalPosition.dy;
     int i = 0; 
     for(; i < widget.gameplayPreset.keyCount.value; i++){
-      if(xpos < columnWidth * (i + 1)){ 
-        break;
+      if(widget.playerPreset.customTouchPositions){
+        if(xpos + widget.playerPreset.customButtonSize! / 2 < widget.playerPreset.touchPositions![i].xPos + widget.playerPreset.customButtonSize! && xpos + widget.playerPreset.customButtonSize! / 2 > widget.playerPreset.touchPositions![i].xPos){
+          if(ypos + widget.playerPreset.customButtonSize! / 2 < widget.playerPreset.touchPositions![i].yPos + widget.playerPreset.customButtonSize! && ypos + widget.playerPreset.customButtonSize! / 2 > widget.playerPreset.touchPositions![i].yPos){
+            hitColumn(i);
+            break;
+          }
+        }
+      }else{
+        if(xpos < columnWidth * (i + 1)){ 
+          hitColumn(i);
+          break;
+        }
       }
     }
-    hitColumn(i);
   }
 
   void hitColumn(int column){
@@ -184,21 +194,19 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
             )
           ), 
           widget.playerPreset.customTouchPositions ?
-            Stack(
-              children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(hitColumn, widget.playerPreset.customButtonSize!)).toList()
-            ) :
-            RawGestureDetector(
-              gestures: {
-                MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
-                  () => MultiTapGestureRecognizer(),
-                  (MultiTapGestureRecognizer instance) {
-                    instance.onTapDown =(pointer, details) {
-                      tapDownCallBack(details);
-                    };
-                  },  
-                ),
-              },
-            )
+            Stack(children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(widget.playerPreset.customButtonSize!)).toList()) : const Stack(),
+          RawGestureDetector(
+            gestures: {
+              MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
+                () => MultiTapGestureRecognizer(),
+                (MultiTapGestureRecognizer instance) {
+                  instance.onTapDown =(pointer, details) {
+                    tapDownCallBack(details);
+                  };
+                },  
+              ),
+            },
+          )
         ]
       )
     );
@@ -338,17 +346,14 @@ class TouchPosition{
   final double xPos;
   final double yPos;
 
-  Widget getButton(Function hitColumn, double buttonSize){
+  Widget getButton(double buttonSize){
     return Positioned(
       top: yPos - buttonSize / 2,
       left: xPos - buttonSize / 2,
       child: SizedBox(
         width: buttonSize,
         height: buttonSize,
-        child: OutlinedButton(
-          child: const Text(""),
-          onPressed: () {hitColumn(key);},
-        ),
+        child: OutlinedButton(onPressed: () {  }, child: null,),
       ),
     );
   }

@@ -30,7 +30,7 @@ class _TouchPositionSetting extends State<TouchPositionSetting>{
             ),
           ),
           Stack(
-            children: widget.touchPositions.map((pair) => pair.getButton((int s) => {}, widget.buttonSize)).toList()
+            children: widget.touchPositions.map((pair) => pair.getButton(widget.buttonSize)).toList()
           )
         ]
       ),
