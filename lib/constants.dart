@@ -269,7 +269,9 @@ class NoteFrequency{
 
 
 List<NoteFrequency> acceleratingNoteFrequencies = [
-  NoteFrequency("01", "accelerating", -80, 0)
+  NoteFrequency("01", "accelerating 1", -90, 0),
+  NoteFrequency("02", "accelerating 2", -70, 0),
+  NoteFrequency("03", "accelerating 3", -50, 0),
 ];
 
 List<NoteFrequency> noteFrequencies(int length) => List.generate(length + 1, (index) => 

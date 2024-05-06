@@ -38,7 +38,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
 
   int ta = 0;
   int tn = 0;
-  late double noteFrequency = -widget.gameplayPreset.noteFrequency.value.toDouble();
+  late double noteFrequency = 80.0;
 
   late final ticker = widget.gameplayPreset.noteFrequency.value > 0 ? 
     //constant speed
@@ -62,9 +62,8 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
         tn++;
         if(ta > 250){
           ta = 0;
-          noteFrequency *= 0.8;
+          noteFrequency *= -widget.gameplayPreset.noteFrequency.value / 100;
           if(noteFrequency < 2){noteFrequency = 2;}
-          print(noteFrequency);
         }
 
         if(tn > noteFrequency){
