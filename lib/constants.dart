@@ -268,6 +268,9 @@ class NoteFrequency{
 }
 
 
+List<NoteFrequency> acceleratingNoteFrequencies = [
+  NoteFrequency("01", "accelerating", -80, 0)
+];
 
 List<NoteFrequency> noteFrequencies(int length) => List.generate(length + 1, (index) => 
   NoteFrequency("${10 + index}", "${(index + 1)} note per second", (1 / (index + 1) * 1000).ceil(), index));

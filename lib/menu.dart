@@ -200,6 +200,7 @@ MenuPathSplit noteFrequencyMenu() => MenuPathSplit([
   MenuPath("back", null, null, endConditionMenu), 
   ...noteFrequencies(MenuSingleton().getHighestNoteFrequencyLevel(MenuSingleton().gameplayPreset)).map((e) => MenuPath(e.name, e, MenuSingleton().noteFrequencySelectCallback, () => null)),
   MenuPath("<blocked>", null, null, noteFrequencyMenu), 
+  ...acceleratingNoteFrequencies.map((e) => MenuPath(e.name, e, MenuSingleton().noteFrequencySelectCallback, () => null)),
 ]);
 
 

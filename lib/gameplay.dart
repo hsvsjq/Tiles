@@ -36,19 +36,51 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late double noteHeightPerMilisecond = (animationDistInNoteHeights) / widget.playerPreset.noteDuration;
   late double hitPosInNoteHeights = (widget.playerPreset.hitPosition / widget.playerPreset.noteHeight);
 
-  late final ticker = createTicker((elapsed) { 
-    int time = elapsed.inMilliseconds - widget.playerPreset.startDelay;
-    if(time >= 0 && time ~/ widget.gameplayPreset.noteFrequency.value == count){
-      if(endMode == EndMode.noteCount && !gameplayEnded && count >= quota - 1){
-        gameplayEnded = true;
-        sendNote(true);
-        count = -1; //setting this to -1 in order to not enter this section again
-        return;
+  int ta = 0;
+  int tn = 0;
+  late double noteFrequency = -widget.gameplayPreset.noteFrequency.value.toDouble();
+
+  late final ticker = widget.gameplayPreset.noteFrequency.value > 0 ? 
+    //constant speed
+    createTicker((elapsed) { 
+      int time = elapsed.inMilliseconds - widget.playerPreset.startDelay;
+      if(time >= 0 && time ~/ widget.gameplayPreset.noteFrequency.value == count){
+        if(endMode == EndMode.noteCount && !gameplayEnded && count >= quota - 1){
+          gameplayEnded = true;
+          sendNote(true);
+          count = -1; //setting this to -1 in order to not enter this section again
+          return;
+        }
+        sendNote(false);
+        count += 1;
       }
-      sendNote(false);
-      count += 1;
-    }
-  });
+    }) :
+    //accelerating
+    createTicker((elapsed){
+      if(elapsed.inMilliseconds - widget.playerPreset.startDelay > 0){
+        ta++;
+        tn++;
+        if(ta > 250){
+          ta = 0;
+          noteFrequency *= 0.8;
+          if(noteFrequency < 2){noteFrequency = 2;}
+          print(noteFrequency);
+        }
+
+        if(tn > noteFrequency){
+          tn = 0;
+          if(endMode == EndMode.noteCount && !gameplayEnded && count >= quota - 1){
+            gameplayEnded = true;
+            sendNote(true);
+            count = -1; //setting this to -1 in order to not enter this section again
+            return;
+          }
+          sendNote(false);
+          count += 1;
+        }
+      }
+    })
+  ;
 
   void sendNote(bool lastNote){
     Set<int> cols = widget.gameplayPreset.notePositioningAlgorithm.function(count, widget.gameplayPreset.keyCount.value);
