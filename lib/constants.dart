@@ -129,6 +129,22 @@ List<NotePositioningAlgorithm> allNotePositioningAlgorithms = [
     (count, keyCount) { return count % 32 == 24 ? <int>{} : (List.generate(keyCount - 1, (index) => index + 1).where((element) => (element) % 2 == count % 2).toSet()..addAll([4,7,9,12,15,20,23,25,28,31].contains(count % 32) ? [0] : [])); }), 
   NotePositioningAlgorithm("24", "cu jack",
     (count, keyCount) { return count % 2 == 0 ? {(count ~/ 2 % ((keyCount - 1) * 2) - keyCount + 1).abs()} : (List.generate(keyCount, (index) => index).toSet()); }), 
+  NotePositioningAlgorithm("25", "running man",
+    (count, keyCount) { return count % 2 == 0 ? {1 + (count ~/ 2 % ((keyCount - 2) * 2) - keyCount + 2).abs()} : {0}; }), 
+  NotePositioningAlgorithm("26", "reverse running man",
+    (count, keyCount) { return count % 2 == 0 ? {(count ~/ 2 % ((keyCount - 2) * 2) - keyCount + 2).abs()} : {keyCount - 1}; }), 
+  NotePositioningAlgorithm("27", "walking trill",
+    (count, keyCount) { return {(((count + 1) % 2 + (count ~/ 4)) % ((keyCount - 1) * 2) - keyCount + 1).abs()}; }), 
+  NotePositioningAlgorithm("28", "smooth walking trill",
+    (count, keyCount) { return {(((count ) % 2 + (count ~/ 4 * 2)) % ((keyCount - 1) * 2) - keyCount + 1).abs()}; }), 
+  NotePositioningAlgorithm("29", "reverse smooth walking trill",
+    (count, keyCount) { return {keyCount - 1 - ((((count) % 2 + (count ~/ 4 * 2)) % ((keyCount - 1) * 2) - keyCount + 1)).abs()}; }), 
+  NotePositioningAlgorithm("30", "spaced roll",
+    (count, keyCount) { var c = count % keyCount; var h = (keyCount / 2).ceil(); return {c % h * 2 + (c >= h ? 1 : 0)}; }), 
+  NotePositioningAlgorithm("31", "reverse spaced roll",
+    (count, keyCount) { var c = count % keyCount; var h = (keyCount / 2).ceil(); return {keyCount - 1 - (c % h * 2 + (c >= h ? 1 : 0))}; }), 
+  
+
 ];
 
 Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
@@ -160,6 +176,11 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[19], //  all full chords
     allNotePositioningAlgorithms[18], //  full bracket
     allNotePositioningAlgorithms[24], //  cu jack
+    allNotePositioningAlgorithms[25], //  running man
+    allNotePositioningAlgorithms[26], //  reverse running man
+    allNotePositioningAlgorithms[27], //  walking trill
+    allNotePositioningAlgorithms[28], //  smooth walking trill
+    allNotePositioningAlgorithms[29], //  reverse smooth walking trill
   ],
   keyCounts[3]: [ //4 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -182,6 +203,13 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[17], //  walking chords
     allNotePositioningAlgorithms[18], //  full bracket
     allNotePositioningAlgorithms[24], //  cu jack
+    allNotePositioningAlgorithms[25], //  running man
+    allNotePositioningAlgorithms[26], //  reverse running man
+    allNotePositioningAlgorithms[27], //  walking trill
+    allNotePositioningAlgorithms[28], //  smooth walking trill
+    allNotePositioningAlgorithms[29], //  reverse smooth walking trill
+    allNotePositioningAlgorithms[30], //  spaced roll
+    allNotePositioningAlgorithms[31], //  reverse spaced roll
   ],
   keyCounts[4]: [ //5 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -209,6 +237,13 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[22], //  cu break
     allNotePositioningAlgorithms[23], //  reverse cu break
     allNotePositioningAlgorithms[24], //  cu jack
+    allNotePositioningAlgorithms[25], //  running man
+    allNotePositioningAlgorithms[26], //  reverse running man
+    allNotePositioningAlgorithms[27], //  walking trill
+    allNotePositioningAlgorithms[28], //  smooth walking trill
+    allNotePositioningAlgorithms[29], //  reverse smooth walking trill
+    allNotePositioningAlgorithms[30], //  spaced roll
+    allNotePositioningAlgorithms[31], //  reverse spaced roll
   ],
   keyCounts[5]: [ //6 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -232,6 +267,13 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[17], //  walking chords
     allNotePositioningAlgorithms[18], //  full bracket
     allNotePositioningAlgorithms[24], //  cu jack
+    allNotePositioningAlgorithms[25], //  running man
+    allNotePositioningAlgorithms[26], //  reverse running man
+    allNotePositioningAlgorithms[27], //  walking trill
+    allNotePositioningAlgorithms[28], //  smooth walking trill
+    allNotePositioningAlgorithms[29], //  reverse smooth walking trill
+    allNotePositioningAlgorithms[30], //  spaced roll
+    allNotePositioningAlgorithms[31], //  reverse spaced roll
   ],
 };
 

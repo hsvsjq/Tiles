@@ -12,7 +12,6 @@ import 'package:tile/home.dart';
 //other gameplay rules
 //  change note frequency mid gameplay  
 //    change note frequency AND scroll speed
-//    change note frequency but NOT scroll speed 
 //make it easier to visualize what the numbers of the player presets represent
 
 
