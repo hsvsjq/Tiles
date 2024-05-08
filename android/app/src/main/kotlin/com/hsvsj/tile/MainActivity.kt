@@ -1,4 +1,4 @@
-package com.example.tile
+package com.hsvsj.tile
 
 import io.flutter.embedding.android.FlutterActivity
 

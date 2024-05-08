@@ -32,9 +32,11 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late final EndMode endMode = widget.gameplayPreset.endCondition.endMode;
   late final int quota = widget.gameplayPreset.endCondition.quota;
 
-  late double animationDistInNoteHeights = ((widget.playerPreset.hitPosition + (MediaQuery.of(context).size.height / widget.playerPreset.noteDuration) * judgements.last.ms) / widget.playerPreset.noteHeight) + 1;
-  late double noteHeightPerMilisecond = (animationDistInNoteHeights) / widget.playerPreset.noteDuration;
-  late double hitPosInNoteHeights = (widget.playerPreset.hitPosition / widget.playerPreset.noteHeight);
+  late double hitPosInPx = widget.playerPreset.hitPosition / 100 * screenSize.height;
+  late double hitPosInNoteHeights = (hitPosInPx / widget.playerPreset.noteHeight);
+  late double noteHeightPerMilisecond = animationDistInNoteHeights / widget.playerPreset.noteDuration;
+  late double animationDistInNoteHeights = ((hitPosInPx + (MediaQuery.of(context).size.height / widget.playerPreset.noteDuration) * judgements.last.ms) / widget.playerPreset.noteHeight);
+  
 
   int ta = 0;
   int tn = 0;
@@ -87,7 +89,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
       for (var col in cols) { 
         var gk = GlobalKey<_Note>();
         globalKeys[col].addFirst(gk);
-        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, widget.playerPreset.noteHeight, widget.playerPreset.hitPosition, animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, key: gk));
+        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, widget.playerPreset.noteHeight, animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, key: gk));
       }
     });
   }
@@ -189,7 +191,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
       body: Stack(
         children: [
           Positioned(
-            top: widget.playerPreset.hitPosition,
+            top: hitPosInPx,
             child: SizedBox(
               width: screenSize.width, 
               height: 5, 
@@ -251,12 +253,11 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
 }
 
 class Note extends StatefulWidget{
-  const Note(this.duration, this.width, this.height, this.hitPosition, this.animationDistInNoteHeights, this.xpos, this.missCallback, this.lastNote, {super.key});
+  const Note(this.duration, this.width, this.height, this.animationDistInNoteHeights, this.xpos, this.missCallback, this.lastNote, {super.key});
 
   final int duration;
   final double width;
   final double height;
-  final double hitPosition;
   final double animationDistInNoteHeights;
   final double xpos;
   final Function missCallback;

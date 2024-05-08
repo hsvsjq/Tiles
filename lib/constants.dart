@@ -20,7 +20,7 @@ List<String> touchSettingsMenu = [
 List<List<String>> touchSettingsMenu2 = [
   [],
   ["true", "false"],
-  ["back", "key 1", "key 2", "key 3", "key 4", "key 5", "key 6"],
+  ["back", "key 1", "key 2", "key 3", "key 4", "key 5", "key 6", "key 7"],
 ];
 
 List<String> settingsMenu = [
@@ -40,9 +40,7 @@ List<int> scrollSpeeds = [
 
 List<String> hitPositionsMenu = hitPositions.map((e) => "$e").toList();
 
-List<int> hitPositions = [
-  200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700
-];
+List<int> hitPositions = List.generate(20, (index) => 5 * (index + 1));
 
 List<String> noteHeightsMenu = noteHeights.map((e) => e.toString()).toList();
 
@@ -77,6 +75,7 @@ List<KeyCount> keyCounts = [
   KeyCount("04", "4 key", 4),
   KeyCount("05", "5 key", 5),
   KeyCount("06", "6 key", 6),
+  KeyCount("07", "7 key", 7),
 ];
 
 List<NotePositioningAlgorithm> allNotePositioningAlgorithms = [
@@ -251,6 +250,36 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[31], //  reverse spaced roll
   ],
   keyCounts[5]: [ //6 key
+    allNotePositioningAlgorithms[0], //  random singles
+    allNotePositioningAlgorithms[13], //  full random
+    allNotePositioningAlgorithms[14], //  roll
+    allNotePositioningAlgorithms[15], //  reverse roll
+    allNotePositioningAlgorithms[16], //  zig zag
+    allNotePositioningAlgorithms[1], //   1/4 jumps
+    allNotePositioningAlgorithms[2], //   1/3 jumps
+    allNotePositioningAlgorithms[3], //   1/2 jumps
+    allNotePositioningAlgorithms[4], //   all jumps
+    allNotePositioningAlgorithms[5], //   1/4 hands
+    allNotePositioningAlgorithms[6], //   1/3 hands
+    allNotePositioningAlgorithms[7], //   1/2 hands
+    allNotePositioningAlgorithms[8], //   all hands
+    allNotePositioningAlgorithms[9], //   1/4 quads
+    allNotePositioningAlgorithms[10], //  1/3 quads
+    allNotePositioningAlgorithms[11], //  1/2 quads
+    allNotePositioningAlgorithms[12], //  all quads
+    allNotePositioningAlgorithms[19], //  all full chords
+    allNotePositioningAlgorithms[17], //  walking chords
+    allNotePositioningAlgorithms[18], //  full bracket
+    allNotePositioningAlgorithms[24], //  cu jack
+    allNotePositioningAlgorithms[25], //  running man
+    allNotePositioningAlgorithms[26], //  reverse running man
+    allNotePositioningAlgorithms[27], //  walking trill
+    allNotePositioningAlgorithms[28], //  smooth walking trill
+    allNotePositioningAlgorithms[29], //  reverse smooth walking trill
+    allNotePositioningAlgorithms[30], //  spaced roll
+    allNotePositioningAlgorithms[31], //  reverse spaced roll
+  ],
+  keyCounts[6]: [ //7 key
     allNotePositioningAlgorithms[0], //  random singles
     allNotePositioningAlgorithms[13], //  full random
     allNotePositioningAlgorithms[14], //  roll
