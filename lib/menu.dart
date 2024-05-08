@@ -97,7 +97,7 @@ class MenuSingleton{
        touchPositions = getTouchPositions(gameplayPreset.keyCount.value);
     }
 
-    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0, ctouch, touchPositions, cbuttonsize, nimagepath);
+    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 0.0, ctouch, touchPositions, cbuttonsize, nimagepath);
   }
 
   List<TouchPosition> getTouchPositions(int count){
@@ -240,7 +240,9 @@ MenuPathSplit hitPositionMenu() => MenuPathSplit([
 
 MenuPathSplit noteHeightMenu() => MenuPathSplit([
   MenuPath("back", null, null, settingsMenu),
-  ...noteHeights.map((e) => MenuPath(e.toString(), e, MenuSingleton().noteHeightSelectCallback, settingsMenu))
+  MenuPath("square", 0, MenuSingleton().noteHeightSelectCallback, settingsMenu),
+  ...noteHeights.map((e) => MenuPath(e.toString(), e, MenuSingleton().noteHeightSelectCallback, settingsMenu)),
+  
 ]);
 
 

@@ -32,10 +32,12 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late final EndMode endMode = widget.gameplayPreset.endCondition.endMode;
   late final int quota = widget.gameplayPreset.endCondition.quota;
 
+  late double noteHeight = widget.playerPreset.noteHeight <= 0 ? columnWidth : widget.playerPreset.noteHeight;
+
   late double hitPosInPx = widget.playerPreset.hitPosition / 100 * screenSize.height;
-  late double hitPosInNoteHeights = (hitPosInPx / widget.playerPreset.noteHeight);
+  late double hitPosInNoteHeights = (hitPosInPx / noteHeight);
   late double noteHeightPerMilisecond = animationDistInNoteHeights / widget.playerPreset.noteDuration;
-  late double animationDistInNoteHeights = ((hitPosInPx + (MediaQuery.of(context).size.height / widget.playerPreset.noteDuration) * judgements.last.ms) / widget.playerPreset.noteHeight);
+  late double animationDistInNoteHeights = ((hitPosInPx + (MediaQuery.of(context).size.height / widget.playerPreset.noteDuration) * judgements.last.ms) / noteHeight);
   
 
   int ta = 0;
@@ -89,7 +91,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
       for (var col in cols) { 
         var gk = GlobalKey<_Note>();
         globalKeys[col].addFirst(gk);
-        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, widget.playerPreset.noteHeight, animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, widget.playerPreset.noteImagePath, key: gk));
+        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, noteHeight, animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, widget.playerPreset.noteImagePath, key: gk));
       }
     });
   }
