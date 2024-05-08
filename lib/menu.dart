@@ -86,7 +86,10 @@ class MenuSingleton{
     var nheight = sharedPreferences.getDouble("noteHeight");
     var ctouch = sharedPreferences.getBool("useCustomButtonPositions");
     var cbuttonsize = sharedPreferences.getDouble("customButtonSize");
-    
+    var nimagepath = sharedPreferences.getString("noteImage");
+
+    nimagepath = "assets/${nimagepath ?? "rectangle"}.png";
+
     ctouch = ctouch ?? false;
 
     List<TouchPosition>? touchPositions;
@@ -94,7 +97,7 @@ class MenuSingleton{
        touchPositions = getTouchPositions(gameplayPreset.keyCount.value);
     }
 
-    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0, ctouch, touchPositions, cbuttonsize);
+    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 60.0, ctouch, touchPositions, cbuttonsize, nimagepath);
   }
 
   List<TouchPosition> getTouchPositions(int count){
@@ -156,7 +159,7 @@ class MenuSingleton{
     sharedPreferences.setBool("useCustomButtonPositions", value);
   }
 
-  double customButtonSize = 40;
+  double customButtonSize = 40; //this is here because of the preview
 
   void buttonSizeSelectCallback(double value){
     customButtonSize = value;
@@ -168,6 +171,10 @@ class MenuSingleton{
   void customPositionKeySelectCallback(int key){
     customPositionKeySelection = key - 1;
     exitMenuCallback(Phase.customButton);
+  }
+
+  void noteImagesSelectCallback(String s){
+    sharedPreferences.setString("noteImage", s);
   }
 }
 
@@ -213,6 +220,7 @@ MenuPathSplit settingsMenu() => MenuPathSplit([
   MenuPath("hit position", null, null, hitPositionMenu),
   MenuPath("note height", null, null, noteHeightMenu),
   MenuPath("button positions", null, null, buttonPositionMenu),
+  MenuPath("note images", null, null, noteImagesMenu),
 ]);
 
 
@@ -257,4 +265,9 @@ MenuPathSplit buttonSizeMenu() => MenuPathSplit([
 MenuPathSplit buttonPositionKeyMenu() => MenuPathSplit([
   MenuPath("back", null, null, buttonPositionMenu),
   ...keyCounts.map((e) => MenuPath("key ${e.value}", e.value, MenuSingleton().customPositionKeySelectCallback, () => null))
+]);
+
+MenuPathSplit noteImagesMenu() => MenuPathSplit([
+  MenuPath("back", null, null, settingsMenu),
+  ...noteImagePaths.map((e) => MenuPath(e, e, MenuSingleton().noteImagesSelectCallback, settingsMenu))
 ]);

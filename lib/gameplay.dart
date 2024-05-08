@@ -89,7 +89,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
       for (var col in cols) { 
         var gk = GlobalKey<_Note>();
         globalKeys[col].addFirst(gk);
-        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, widget.playerPreset.noteHeight, animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, key: gk));
+        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, widget.playerPreset.noteHeight, animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, widget.playerPreset.noteImagePath, key: gk));
       }
     });
   }
@@ -196,7 +196,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
               width: screenSize.width, 
               height: 5, 
               child: Image.asset(
-                'assets/p.png',
+                'assets/rectangle.png',
                 fit: BoxFit.fill,
               ),
             )
@@ -253,7 +253,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
 }
 
 class Note extends StatefulWidget{
-  const Note(this.duration, this.width, this.height, this.animationDistInNoteHeights, this.xpos, this.missCallback, this.lastNote, {super.key});
+  const Note(this.duration, this.width, this.height, this.animationDistInNoteHeights, this.xpos, this.missCallback, this.lastNote, this.noteAssetPath, {super.key});
 
   final int duration;
   final double width;
@@ -262,6 +262,7 @@ class Note extends StatefulWidget{
   final double xpos;
   final Function missCallback;
   final bool lastNote;
+  final String noteAssetPath;
   
   @override
   State<Note> createState() => _Note();
@@ -298,7 +299,7 @@ class _Note extends State<Note> with SingleTickerProviderStateMixin {
         width: widget.width, 
         height: widget.height, 
         child: Image.asset(
-          'assets/p.png',
+          widget.noteAssetPath,
           fit: BoxFit.fill,
         ),
       )
@@ -335,7 +336,7 @@ class GameplayPreset{
 }
 
 class PlayerPreset{
-  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions, this.customButtonSize);
+  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions, this.customButtonSize, this.noteImagePath);
   int noteDuration;
   double hitPosition;
   double noteHeight;
@@ -343,6 +344,7 @@ class PlayerPreset{
   bool customTouchPositions;
   List<TouchPosition>? touchPositions;
   double? customButtonSize;
+  String noteImagePath;
 }
 
 class NotePositioningAlgorithm{

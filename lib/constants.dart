@@ -3,34 +3,6 @@ import 'package:tile/gameplay.dart';
 import 'package:tile/util.dart';
 import 'dart:math' as math;
 
-
-
-List<String> mainMenuList = [
-  "play",
-  "settings",
-  "personal best",
-];
-
-List<String> touchSettingsMenu = [
-  "back",
-  "use custom position",
-  "custom positions",
-];
-
-List<List<String>> touchSettingsMenu2 = [
-  [],
-  ["true", "false"],
-  ["back", "key 1", "key 2", "key 3", "key 4", "key 5", "key 6", "key 7"],
-];
-
-List<String> settingsMenu = [
-  "back",
-  "scroll speed",
-  "hit position",
-  "note height",
-  "button positions",
-];
-
 //player preset----------------------------------------------------------------------------------------
 List<String> scrollSpeedsMenu = scrollSpeeds.map((e) => "${e / 1000} second").toList();
 
@@ -52,7 +24,11 @@ List<double> buttonSizes = [
   20,30,40,50,60,70,80,90,100,110,120,130,140,150
 ];
 
-
+List<String> noteImagePaths = [
+  "rectangle", 
+  "circle", 
+  "cowboy", 
+];
 
 //-----------------------------------------------------------------------------------------------------
 
