@@ -132,7 +132,31 @@ List<NotePositioningAlgorithm> allNotePositioningAlgorithms = [
     (count, keyCount) { const c = [{0,1}, {2}, {0,3}, {1}, {2,3}, {1}, {0,3}, {2}, {0,1}, {3}, {0,2}, {1}, {2,3}, {0}, {1,3}, {2}, ]; return c[count % c.length]; }), 
   NotePositioningAlgorithm("33", "tame jumpstream 2",
     (count, keyCount) { const c = [{0,3}, {1}, {0,3}, {2}, {0,1}, {3}, {1,2}, {3}, {0,1}, {3}, {1,2}, {0}, {2,3}, {0}, {1,2},{0}, {2,3}, {0}, {1,2}, {3},{0,2},{1}, {2,3}, {0,1}, {2,3}, {0,1}, {1,3}, {0,2}, {1,3}, {2} ]; return c[count % c.length]; }), 
-
+  NotePositioningAlgorithm("34", "walking adjacent jumps",
+    (count, keyCount) { return {count % keyCount, (count + 1) % keyCount}; }), 
+  NotePositioningAlgorithm("35", "reverse walking adjacent jumps",
+    (count, keyCount) { return {-count % keyCount, (-count + 1) % keyCount}; }), 
+  NotePositioningAlgorithm("36", "half stair",
+    (count, keyCount) { const c = [0,1,2,3, 1,2,3,4, 2,3,4,5, 3,4,5,6]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("37", "reverse half stair",
+    (count, keyCount) { const c = [6,5,4,3, 5,4,3,2, 4,3,2,1, 3,2,1,0]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("38", "triplet stair",
+    (count, keyCount) { const c = [0,1,2, 1,2,3, 2,3,4, 3,4,5, 4,5,6]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("39", "reverse triplet stair",
+    (count, keyCount) { const c = [6,5,4, 5,4,3, 4,3,2, 3,2,1, 2,1,0]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("40", "incomplete stair",
+    (count, keyCount) { const c = [0,1,2,4,5,6]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("41", "reverse incomplete stair",
+    (count, keyCount) { const c = [6,5,4,2,1,0]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("42", "inequality stair",
+    (count, keyCount) { const c = [0,1,2, 0,1,2,1,0, 1,2,3, 1,2,3,2,1, 2,3,4, 2,3,4,3,2, 3,4,5, 3,4,5,4,3, 4,5,6, 4,5,6,5,4]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("43", "reverse inequality stair",
+    (count, keyCount) { const c = [6,5,4, 6,5,4,5,6, 5,4,3, 5,4,3,4,5, 4,3,2, 4,3,2,3,4, 3,2,1 ,3,2,1,2,3, 2,1,0, 2,1,0,1,2]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("44", "missing tooth stair",
+    (count, keyCount) { const c = [0,1,3,4, 1,2,4,5, 2,3,5,6]; return {c[count % c.length]}; }), 
+  NotePositioningAlgorithm("45", "reverse missing tooth stair",
+    (count, keyCount) { const c = [6,5,3,2, 5,4,2,1, 4,3,1,0]; return {c[count % c.length]}; }), 
+    
 ];
 
 Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
@@ -169,6 +193,7 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[27], //  walking trill
     allNotePositioningAlgorithms[28], //  smooth walking trill
     allNotePositioningAlgorithms[29], //  reverse smooth walking trill
+    allNotePositioningAlgorithms[34], //  walking adjacent jumps
   ],
   keyCounts[3]: [ //4 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -200,6 +225,8 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[29], //  reverse smooth walking trill
     allNotePositioningAlgorithms[30], //  spaced roll
     allNotePositioningAlgorithms[31], //  reverse spaced roll
+    allNotePositioningAlgorithms[34], //  walking adjacent jumps
+    allNotePositioningAlgorithms[35], //  reverse walking adjacent jumps
   ],
   keyCounts[4]: [ //5 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -234,6 +261,8 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[29], //  reverse smooth walking trill
     allNotePositioningAlgorithms[30], //  spaced roll
     allNotePositioningAlgorithms[31], //  reverse spaced roll
+    allNotePositioningAlgorithms[34], //  walking adjacent jumps
+    allNotePositioningAlgorithms[35], //  reverse walking adjacent jumps
   ],
   keyCounts[5]: [ //6 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -264,6 +293,8 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[29], //  reverse smooth walking trill
     allNotePositioningAlgorithms[30], //  spaced roll
     allNotePositioningAlgorithms[31], //  reverse spaced roll
+    allNotePositioningAlgorithms[34], //  walking adjacent jumps
+    allNotePositioningAlgorithms[35], //  reverse walking adjacent jumps
   ],
   keyCounts[6]: [ //7 key
     allNotePositioningAlgorithms[0], //  random singles
@@ -294,6 +325,18 @@ Map<KeyCount, List<NotePositioningAlgorithm>> notePositioningAlgorithms = {
     allNotePositioningAlgorithms[29], //  reverse smooth walking trill
     allNotePositioningAlgorithms[30], //  spaced roll
     allNotePositioningAlgorithms[31], //  reverse spaced roll
+    allNotePositioningAlgorithms[34], //  walking adjacent jumps
+    allNotePositioningAlgorithms[35], //  reverse walking adjacent jumps
+    allNotePositioningAlgorithms[36], //  half stair
+    allNotePositioningAlgorithms[37], //  reverse half stair
+    allNotePositioningAlgorithms[38], //  triplet stair
+    allNotePositioningAlgorithms[39], //  reverse triplet stair
+    allNotePositioningAlgorithms[40], //  incomplete stair
+    allNotePositioningAlgorithms[41], //  reverse incomplete stair
+    allNotePositioningAlgorithms[42], //  inequality stair
+    allNotePositioningAlgorithms[43], //  reverse inequality stair
+    allNotePositioningAlgorithms[44], //  missing tooth stair
+    allNotePositioningAlgorithms[45], //  reverse missing tooth stair
   ],
 };
 
