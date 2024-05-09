@@ -87,17 +87,18 @@ class MenuSingleton{
     var ctouch = sharedPreferences.getBool("useCustomButtonPositions");
     var cbuttonsize = sharedPreferences.getDouble("customButtonSize");
     var nimagepath = sharedPreferences.getString("noteImage");
+    var nmulticolor = sharedPreferences.getBool("multicolouredNotes");
 
-    nimagepath = "assets/${nimagepath ?? "rectangle"}.png";
+    nimagepath = nimagepath ?? "rectangle";
 
     ctouch = ctouch ?? false;
-
+    nmulticolor = nmulticolor ?? false;
     List<TouchPosition>? touchPositions;
     if(ctouch){
        touchPositions = getTouchPositions(gameplayPreset.keyCount.value);
     }
 
-    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 0.0, ctouch, touchPositions, cbuttonsize, nimagepath);
+    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 0.0, ctouch, touchPositions, cbuttonsize, nmulticolor, nimagepath);
   }
 
   List<TouchPosition> getTouchPositions(int count){
@@ -171,6 +172,10 @@ class MenuSingleton{
   void customPositionKeySelectCallback(int key){
     customPositionKeySelection = key - 1;
     exitMenuCallback(Phase.customButton);
+  }
+
+  void noteImagesMulticolouredSelectCallback(bool b){
+    sharedPreferences.setBool("multicolouredNotes", b);
   }
 
   void noteImagesSelectCallback(String s){
@@ -271,5 +276,12 @@ MenuPathSplit buttonPositionKeyMenu() => MenuPathSplit([
 
 MenuPathSplit noteImagesMenu() => MenuPathSplit([
   MenuPath("back", null, null, settingsMenu),
-  ...noteImagePaths.map((e) => MenuPath(e, e, MenuSingleton().noteImagesSelectCallback, settingsMenu))
+  MenuPath("use multicoloured notes", null, null, () =>
+    MenuPathSplit([
+      MenuPath("back", null, null, buttonPositionMenu),
+      MenuPath("true", true, MenuSingleton().noteImagesMulticolouredSelectCallback, noteImagesMenu),
+      MenuPath("false", false, MenuSingleton().noteImagesMulticolouredSelectCallback, noteImagesMenu),
+    ])
+  ),
+  ...noteImagePaths.map((e) => MenuPath(e, e, MenuSingleton().noteImagesSelectCallback, settingsMenu)),
 ]);

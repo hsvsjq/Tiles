@@ -91,7 +91,9 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
       for (var col in cols) { 
         var gk = GlobalKey<_Note>();
         globalKeys[col].addFirst(gk);
-        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, noteHeight, animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, widget.playerPreset.noteImagePath, key: gk));
+        notes[col].addFirst(Note(widget.playerPreset.noteDuration, columnWidth, noteHeight, 
+          animationDistInNoteHeights, col.toDouble(), missCallback, lastNote, 
+          "assets/${widget.playerPreset.noteImage}${widget.playerPreset.multicolouredNotes ? multicolouredNoteIndexes[widget.gameplayPreset.keyCount]![col] : 0}.png", key: gk));
       }
     });
   }
@@ -198,7 +200,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
               width: screenSize.width, 
               height: 5, 
               child: Image.asset(
-                'assets/rectangle.png',
+                'assets/rectangle0.png',
                 fit: BoxFit.fill,
               ),
             )
@@ -338,7 +340,7 @@ class GameplayPreset{
 }
 
 class PlayerPreset{
-  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions, this.customButtonSize, this.noteImagePath);
+  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions, this.customButtonSize, this.multicolouredNotes, this.noteImage);
   int noteDuration;
   double hitPosition;
   double noteHeight;
@@ -346,7 +348,8 @@ class PlayerPreset{
   bool customTouchPositions;
   List<TouchPosition>? touchPositions;
   double? customButtonSize;
-  String noteImagePath;
+  bool multicolouredNotes;
+  String noteImage;
 }
 
 class NotePositioningAlgorithm{
@@ -389,7 +392,10 @@ class TouchPosition{
       child: SizedBox(
         width: buttonSize,
         height: buttonSize,
-        child: OutlinedButton(onPressed: () {  }, child: null,),
+        child: Image.asset(
+          "assets/customButton.png",
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }

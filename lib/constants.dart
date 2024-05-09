@@ -24,6 +24,16 @@ List<double> buttonSizes = [
   20,30,40,50,60,70,80,90,100,110,120,130,140,150
 ];
 
+Map<KeyCount, List<int>> multicolouredNoteIndexes = {
+  keyCounts[0]: [0],
+  keyCounts[1]: [0, 1],
+  keyCounts[2]: [0, 1, 0],
+  keyCounts[3]: [0, 0, 1, 0],
+  keyCounts[4]: [0, 1, 0, 1, 0],
+  keyCounts[5]: [0, 1, 0, 0, 1, 0],
+  keyCounts[6]: [0, 1, 0, 2, 0, 1, 0],
+};
+
 List<String> noteImagePaths = [
   "rectangle", 
   "circle", 
@@ -332,7 +342,7 @@ List<NoteFrequency> noteFrequencies(int length) => List.generate(length + 1, (in
 List<Judgement> judgements = [
   Judgement("good", 40, 3),
   Judgement("goof", 70, 2),
-  Judgement("goon", 120, 1),
+  Judgement("goon", 200, 1),
 ];
 
 class Judgement{
