@@ -11,11 +11,7 @@ import 'package:tile/home.dart';
 //  change note frequency mid gameplay  
 //    change note frequency AND scroll speed
 //make it easier to visualize what the numbers of the player presets represent
-//roguelike?????????????????????????????
-//modo paisagem
 //visual feedback to hit column   ?----
-//pattern
-//  7k iidx stairs ----
 
 void main() {
   runApp(const MyApp());
