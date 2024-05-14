@@ -88,6 +88,11 @@ class MenuSingleton{
     var cbuttonsize = sharedPreferences.getDouble("customButtonSize");
     var nimagepath = sharedPreferences.getString("noteImage");
     var nmulticolor = sharedPreferences.getBool("multicolouredNotes");
+    var quarterRotations = sharedPreferences.getInt("quarterRotations");
+    var widthPercentage = sharedPreferences.getDouble("widthPercentage");
+
+    quarterRotations = quarterRotations ?? 0;
+    widthPercentage = widthPercentage ?? 1;
 
     nimagepath = nimagepath ?? "rectangle";
 
@@ -98,7 +103,7 @@ class MenuSingleton{
        touchPositions = getTouchPositions(gameplayPreset.keyCount.value);
     }
 
-    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 0.0, ctouch, touchPositions, cbuttonsize, nmulticolor, nimagepath);
+    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 40.0, ctouch, touchPositions, cbuttonsize, nmulticolor, nimagepath, quarterRotations, widthPercentage);
   }
 
   List<TouchPosition> getTouchPositions(int count){
@@ -181,6 +186,14 @@ class MenuSingleton{
   void noteImagesSelectCallback(String s){
     sharedPreferences.setString("noteImage", s);
   }
+
+  void playfieldWidthSelectCallback(double d){
+    sharedPreferences.setDouble("widthPercentage", d);
+  }
+
+  void playfieldRotationSelectCallback(int i){
+    sharedPreferences.setInt("quarterRotations", i);
+  }
 }
 
 
@@ -226,6 +239,8 @@ MenuPathSplit settingsMenu() => MenuPathSplit([
   MenuPath("note height", null, null, noteHeightMenu),
   MenuPath("button positions", null, null, buttonPositionMenu),
   MenuPath("note images", null, null, noteImagesMenu),
+  MenuPath("playfield width", null, null, playfieldWidthMenu),
+  MenuPath("playfield rotation", null, null, playfieldRotationMenu),
 ]);
 
 
@@ -284,4 +299,17 @@ MenuPathSplit noteImagesMenu() => MenuPathSplit([
     ])
   ),
   ...noteImagePaths.map((e) => MenuPath(e, e, MenuSingleton().noteImagesSelectCallback, settingsMenu)),
+]);
+
+MenuPathSplit playfieldWidthMenu() => MenuPathSplit([
+  MenuPath("back", null, null, settingsMenu),
+  ...playfieldWidths.map((e) => MenuPath("${e * 100}%", e, MenuSingleton().playfieldWidthSelectCallback, settingsMenu)),
+]);
+
+MenuPathSplit playfieldRotationMenu() => MenuPathSplit([
+  MenuPath("back", null, null, settingsMenu),
+  MenuPath("0", 0, MenuSingleton().playfieldRotationSelectCallback, settingsMenu),
+  MenuPath("90", 1, MenuSingleton().playfieldRotationSelectCallback, settingsMenu),
+  MenuPath("180", 2, MenuSingleton().playfieldRotationSelectCallback, settingsMenu),
+  MenuPath("270", 3, MenuSingleton().playfieldRotationSelectCallback, settingsMenu),
 ]);

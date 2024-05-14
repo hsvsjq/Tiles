@@ -26,7 +26,9 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late final notes = List.generate(widget.gameplayPreset.keyCount.value, (i) => ListQueue<Note>());
   
   var count = 0;
-  late final Size screenSize = MediaQuery.of(context).size;
+  late final Size screenSize = widget.playerPreset.quarterRotations % 2 == 0 ? 
+    Size(MediaQuery.of(context).size.width * widget.playerPreset.widthPercentage, MediaQuery.of(context).size.height) :
+    Size(MediaQuery.of(context).size.height * widget.playerPreset.widthPercentage, MediaQuery.of(context).size.width);
   late final double columnWidth = screenSize.width / widget.gameplayPreset.keyCount.value;
 
   late final EndMode endMode = widget.gameplayPreset.endCondition.endMode;
@@ -37,7 +39,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   late double hitPosInPx = widget.playerPreset.hitPosition / 100 * screenSize.height;
   late double hitPosInNoteHeights = (hitPosInPx / noteHeight);
   late double noteHeightPerMilisecond = animationDistInNoteHeights / widget.playerPreset.noteDuration;
-  late double animationDistInNoteHeights = ((hitPosInPx + (MediaQuery.of(context).size.height / widget.playerPreset.noteDuration) * judgements.last.ms) / noteHeight);
+  late double animationDistInNoteHeights = ((hitPosInPx + (screenSize.height / widget.playerPreset.noteDuration) * judgements.last.ms) / noteHeight);
   
 
   int ta = 0;
@@ -60,7 +62,7 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
       }
     }) :
     //accelerating
-    createTicker((elapsed){
+    createTicker((elapsed){ 
       if(elapsed.inMilliseconds - widget.playerPreset.startDelay > 0){
         ta++;
         tn++;
@@ -139,9 +141,11 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   }
 
   tapDownCallBack(TapDownDetails details){
-    double xpos = details.globalPosition.dx;
-    double ypos = details.globalPosition.dy;
+    double xpos = details.localPosition.dx;
+    double ypos = details.localPosition.dy;
     int i = 0; 
+    
+
     for(; i < widget.gameplayPreset.keyCount.value; i++){
       if(widget.playerPreset.customTouchPositions){
         if(xpos + widget.playerPreset.customButtonSize! / 2 < widget.playerPreset.touchPositions![i].xPos + widget.playerPreset.customButtonSize! && xpos + widget.playerPreset.customButtonSize! / 2 > widget.playerPreset.touchPositions![i].xPos){
@@ -192,59 +196,62 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            top: hitPosInPx,
-            child: SizedBox(
-              width: screenSize.width, 
-              height: 5, 
-              child: Image.asset(
-                'assets/rectangle0.png',
-                fit: BoxFit.fill,
-              ),
+      body: RotatedBox(
+        quarterTurns: widget.playerPreset.quarterRotations,
+        child: Stack(
+          children: [
+            Positioned(
+              top: hitPosInPx,
+              child: SizedBox(
+                width: screenSize.width, 
+                height: 5, 
+                child: Image.asset(
+                  'assets/rectangle0.png',
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+            Positioned(
+              top: 300,
+              left: screenSize.width / 2 - 45,
+                child: Text(
+                  lastJudgementName,
+                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2)
+                ),
+            ),
+            Positioned(
+              top: 300,
+              left: screenSize.width / 2 + 45,
+                child: Text(
+                  (lastNoteEarly == null ? "" : (lastNoteEarly! ? "early" : "late")),
+                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5)
+                ),
+            ),
+            Positioned(
+              child: SizedBox(
+                width: screenSize.width, 
+                height: screenSize.height, 
+                child: Stack(
+                  children: notes.expand((pair) => pair).toList()
+                ),
+              )
+            ), 
+            widget.playerPreset.customTouchPositions ?
+              Stack(children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(widget.playerPreset.customButtonSize!)).toList()) : const Stack(),
+            RawGestureDetector(
+              gestures: { 
+                MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
+                  () => MultiTapGestureRecognizer(),
+                  (MultiTapGestureRecognizer instance) {
+                    instance.onTapDown =(pointer, details) {
+                      tapDownCallBack(details);
+                    };
+                  },  
+                ),
+              },
             )
-          ),
-          Positioned(
-            top: 300,
-            left: screenSize.width / 2 - 45,
-              child: Text(
-                lastJudgementName,
-                style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2)
-              ),
-          ),
-          Positioned(
-            top: 300,
-            left: screenSize.width / 2 + 45,
-              child: Text(
-                (lastNoteEarly == null ? "" : (lastNoteEarly! ? "early" : "late")),
-                style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5)
-              ),
-          ),
-          Positioned(
-            child: SizedBox(
-              width: screenSize.width, 
-              height: screenSize.height, 
-              child: Stack(
-                children: notes.expand((pair) => pair).toList()
-              ),
-            )
-          ), 
-          widget.playerPreset.customTouchPositions ?
-            Stack(children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(widget.playerPreset.customButtonSize!)).toList()) : const Stack(),
-          RawGestureDetector(
-            gestures: {
-              MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
-                () => MultiTapGestureRecognizer(),
-                (MultiTapGestureRecognizer instance) {
-                  instance.onTapDown =(pointer, details) {
-                    tapDownCallBack(details);
-                  };
-                },  
-              ),
-            },
-          )
-        ]
+          ]
+        )
       )
     );
   }
@@ -340,7 +347,7 @@ class GameplayPreset{
 }
 
 class PlayerPreset{
-  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions, this.customButtonSize, this.multicolouredNotes, this.noteImage);
+  PlayerPreset(this.startDelay, this.hitPosition, this.noteDuration, this.noteHeight, this.customTouchPositions, this.touchPositions, this.customButtonSize, this.multicolouredNotes, this.noteImage, this.quarterRotations, this.widthPercentage);
   int noteDuration;
   double hitPosition;
   double noteHeight;
@@ -350,6 +357,8 @@ class PlayerPreset{
   double? customButtonSize;
   bool multicolouredNotes;
   String noteImage;
+  int quarterRotations;
+  double widthPercentage;
 }
 
 class NotePositioningAlgorithm{
