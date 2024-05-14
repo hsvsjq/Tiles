@@ -103,7 +103,7 @@ class MenuSingleton{
        touchPositions = getTouchPositions(gameplayPreset.keyCount.value);
     }
 
-    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 40.0, ctouch, touchPositions, cbuttonsize, nmulticolor, nimagepath, quarterRotations, widthPercentage);
+    return PlayerPreset(2000, hpos == null ? 80 : hpos.toDouble(), sspeed ?? 1500, nheight ?? 40.0, ctouch, touchPositions, cbuttonsize ?? 40, nmulticolor, nimagepath, quarterRotations, widthPercentage);
   }
 
   List<TouchPosition> getTouchPositions(int count){

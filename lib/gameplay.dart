@@ -196,62 +196,67 @@ class _Gameplay extends State<Gameplay> with SingleTickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RotatedBox(
-        quarterTurns: widget.playerPreset.quarterRotations,
-        child: Stack(
-          children: [
-            Positioned(
-              top: hitPosInPx,
-              child: SizedBox(
-                width: screenSize.width, 
-                height: 5, 
-                child: Image.asset(
-                  'assets/rectangle0.png',
-                  fit: BoxFit.fill,
+      body: Stack(
+        children: [
+          RotatedBox(
+            quarterTurns: widget.playerPreset.quarterRotations,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: hitPosInPx,
+                  child: SizedBox(
+                    width: screenSize.width, 
+                    height: 5, 
+                    child: Image.asset(
+                      'assets/rectangle0.png',
+                      fit: BoxFit.fill,
+                    ),
+                  )
                 ),
-              )
-            ),
-            Positioned(
-              top: 300,
-              left: screenSize.width / 2 - 45,
-                child: Text(
-                  lastJudgementName,
-                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2)
+                Positioned(
+                  top: 300,
+                  left: screenSize.width / 2 - 45,
+                    child: Text(
+                      lastJudgementName,
+                      style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2)
+                    ),
                 ),
-            ),
-            Positioned(
-              top: 300,
-              left: screenSize.width / 2 + 45,
-                child: Text(
-                  (lastNoteEarly == null ? "" : (lastNoteEarly! ? "early" : "late")),
-                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5)
+                Positioned(
+                  top: 300,
+                  left: screenSize.width / 2 + 45,
+                    child: Text(
+                      (lastNoteEarly == null ? "" : (lastNoteEarly! ? "early" : "late")),
+                      style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5)
+                    ),
                 ),
-            ),
-            Positioned(
-              child: SizedBox(
-                width: screenSize.width, 
-                height: screenSize.height, 
-                child: Stack(
-                  children: notes.expand((pair) => pair).toList()
-                ),
-              )
-            ), 
-            widget.playerPreset.customTouchPositions ?
-              Stack(children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(widget.playerPreset.customButtonSize!)).toList()) : const Stack(),
-            RawGestureDetector(
-              gestures: { 
-                MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
-                  () => MultiTapGestureRecognizer(),
-                  (MultiTapGestureRecognizer instance) {
-                    instance.onTapDown =(pointer, details) {
-                      tapDownCallBack(details);
-                    };
-                  },  
-                ),
-              },
+                Positioned(
+                  child: SizedBox(
+                    width: screenSize.width, 
+                    height: screenSize.height, 
+                    child: Stack(
+                      children: notes.expand((pair) => pair).toList()
+                    ),
+                  )
+                ), 
+                
+              ]
             )
-          ]
-        )
+          ),
+          widget.playerPreset.customTouchPositions ?
+            Stack(children: widget.playerPreset.touchPositions!.map((pair) => pair.getButton(widget.playerPreset.customButtonSize!)).toList()) : const Stack(),
+          RawGestureDetector(
+            gestures: { 
+              MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
+                () => MultiTapGestureRecognizer(),
+                (MultiTapGestureRecognizer instance) {
+                  instance.onTapDown =(pointer, details) {
+                    tapDownCallBack(details);
+                  };
+                },  
+              ),
+            },
+          )
+        ]
       )
     );
   }
